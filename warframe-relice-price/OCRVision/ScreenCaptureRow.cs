@@ -77,5 +77,41 @@ namespace warframe_relice_price.OCRVision
             return bmp;
         }
 
+        public static Bitmap toGrayScale(Bitmap original)
+        {
+            Bitmap grayScale = new Bitmap(original.Width, original.Height);
+            using (Graphics g = Graphics.FromImage(grayScale))
+            {
+                ColorMatrix colorMatrix = new ColorMatrix(
+                    new float[][]
+                    {
+                        new float[] {0.299f, 0.299f, 0.299f, 0, 0},
+                        new float[] {0.587f, 0.587f, 0.587f, 0, 0},
+                        new float[] {0.114f, 0.114f, 0.114f, 0, 0},
+                        new float[] {0, 0, 0, 1, 0},
+                        new float[] {0, 0, 0, 0, 1}
+                    });
+                ImageAttributes attributes = new ImageAttributes();
+                attributes.SetColorMatrix(colorMatrix);
+                g.DrawImage(original, new Rectangle(0, 0, original.Width, original.Height),
+                    0, 0, original.Width, original.Height, GraphicsUnit.Pixel, attributes);
+            }
+            return grayScale;
+        }
+
+        public static Bitmap Threshold(Bitmap src, byte threshold = 160)
+        {
+            Bitmap dst = new Bitmap(src.Width, src.Height);
+            for (int y = 0; y < src.Height; y++)
+            {
+                for (int x = 0; x < src.Width; x++)
+                {
+                    Color c = src.GetPixel(x, y);
+                    byte v = (byte)((c.R + c.G + c.B) / 3);
+                    dst.SetPixel(x, y, v > threshold ? Color.White : Color.Black);
+                }
+            }
+            return dst;
+        }
     }
 }

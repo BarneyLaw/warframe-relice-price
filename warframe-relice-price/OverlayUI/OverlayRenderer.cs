@@ -73,18 +73,32 @@ namespace warframe_relice_price.OverlayUI
             _overlayCanvas.Children.Add(detectionRect);
 
             // Reward Row Box
-            var rowRect = new System.Windows.Shapes.Rectangle
-            {
-                Width = ScreenCaptureRow.row_width,
-                Height = ScreenCaptureRow.row_height,
-                Stroke = System.Windows.Media.Brushes.Blue,
-                StrokeThickness = 2,
-                Fill = System.Windows.Media.Brushes.Transparent
-            };
+            //var rowRect = new System.Windows.Shapes.Rectangle
+            //{
+            //    Width = ScreenCaptureRow.row_width,
+            //    Height = ScreenCaptureRow.row_height,
+            //    Stroke = System.Windows.Media.Brushes.Blue,
+            //    StrokeThickness = 2,
+            //    Fill = System.Windows.Media.Brushes.Transparent
+            //};
 
-            Canvas.SetLeft(rowRect, ScreenCaptureRow.row_x_coordinate);
-            Canvas.SetTop(rowRect, ScreenCaptureRow.row_y_coordinate);
-            _overlayCanvas.Children.Add(rowRect);
+            //Canvas.SetLeft(rowRect, ScreenCaptureRow.row_x_coordinate);
+            //Canvas.SetTop(rowRect, ScreenCaptureRow.row_y_coordinate);
+            //_overlayCanvas.Children.Add(rowRect);
+        }
+
+        public void DrawItemsName(string text)
+        {
+            var itemNameText = new TextBlock
+            {
+                Text = text,
+                FontWeight = FontWeights.Light,
+                Foreground = System.Windows.Media.Brushes.White,
+                FontSize = 16
+            };
+            itemNameText.Measure(new System.Windows.Size(double.PositiveInfinity, double.PositiveInfinity));
+            double textWidth = itemNameText.DesiredSize.Width;
+
         }
 
         public void DrawAll(double width, double height, int slots)

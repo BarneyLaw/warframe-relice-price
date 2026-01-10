@@ -13,14 +13,10 @@ namespace warframe_relice_price.OCRVision
                 return false; 
             }
 
-            Logger.Log("OCR Text Detected: " + ocrText);
-
             string normalizedText = ocrText.ToUpperInvariant()
                                            .Replace(" ", string.Empty)
                                            .Replace("\r", string.Empty)
                                            .Replace("\n", string.Empty);
-
-            Logger.Log("Normalized OCR Text: " + normalizedText);
 
             return normalizedText.Contains("REWARD") || normalizedText.Contains("REWARDS");
         }

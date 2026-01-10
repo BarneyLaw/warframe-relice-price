@@ -28,6 +28,10 @@ namespace warframe_relice_price.Core
         private readonly TimeSpan _minRewardScreenTime = TimeSpan.FromSeconds(2);
         private readonly TimeSpan _maxRewardScreenTime = TimeSpan.FromSeconds(15);
 
+        // To track stable reward capture
+        private int _rewardDetectionStreak;
+        private const int RewardDetectionStreakRequired = 4;
+
         // To delay capturing stable reward after detection
         private bool _hasCapturedStableReward;
         private readonly TimeSpan _rewardOcrDelay = TimeSpan.FromMilliseconds(1000);
@@ -141,11 +145,26 @@ namespace warframe_relice_price.Core
                     {
                         Logger.Log($"Reward screen detected. OCR(detection box)='{detectionText}'");
 
-                        _state = AppState.Reward;
-                        _rewardScreenEnteredAtUtc = DateTime.UtcNow;
+                        _rewardDetectionStreak++;
 
-                        _hasCapturedStableReward = false;
-                        _rewardScreenMisses = 0;
+                        if (_rewardDetectionStreak >= RewardDetectionStreakRequired)
+                        {
+                            Logger.Log($"Reward screen confirmed. OCR='{detectionText}'");
+
+                            _state = AppState.Reward;
+                            _rewardScreenEnteredAtUtc = DateTime.UtcNow;
+                            _hasCapturedStableReward = false;
+                            _rewardScreenMisses = 0;
+                            _rewardDetectionStreak = 0;
+                        }
+                        else
+                        {
+                            Logger.Log($"Reward screen detection streak: {_rewardDetectionStreak}/{RewardDetectionStreakRequired}");
+                        }
+                    }
+                    else
+                    {
+                        _rewardDetectionStreak = 0;
                     }
                 }
                 else if (_state == AppState.Reward)
@@ -205,9 +224,12 @@ namespace warframe_relice_price.Core
         {
             var screenRowRect = ScreenCaptureRow.ToScreenRect(ScreenCaptureRow.row_rect);
             using var bmp = ScreenCaptureRow.captureRegion(screenRowRect);
-            string rowText = ImageToText.ConvertImageToText(bmp);
+            var gray = ScreenCaptureRow.toGrayScale(bmp);
+            ImageToText.saveDebugImage(gray, "reward_row_gray");
+            ImageToText.saveDebugImage(bmp, "reward_row_raw");
+            string rowText = ImageToText.multiPassOCR(bmp);
 
-            Logger.Log($"OCR(reward row)='{rowText}'");
+            Logger.Log($"OCR(reward row) = '{rowText}'");
         }
     }
 }
