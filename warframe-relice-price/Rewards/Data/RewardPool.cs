@@ -505,6 +505,16 @@ public static class RelicRewardPool
         // Forma
         new("Forma Blueprint", "forma blueprint"),
 
+		// Fang Prime
+        new("Fang Prime Blueprint", "fang prime blueprint"),
+		new("Fang Prime Handle", "fang prime handle"),
+		new("Fang Prime Barrel", "fang prime barrel"),
+		
+		// Fragor Prime
+        new("Fragor Prime Blueprint", "fragor prime blueprint"),
+		new("Fragor Prime Handle", "fragor prime handle"),
+		new("Fragor Prime Head", "fragor prime head"),
+
         // Fulmin Prime
         new("Fulmin Prime Blueprint", "fulmin prime blueprint"),
 		new("Fulmin Prime Receiver", "fulmin prime receiver"),
@@ -514,50 +524,86 @@ public static class RelicRewardPool
         // Galatine Prime
         new("Galatine Prime Blueprint", "galatine prime blueprint"),
 		new("Galatine Prime Handle", "galatine prime handle"),
-		new("Galatine Prime Guard", "galatine prime guard"),
 		new("Galatine Prime Blade", "galatine prime blade"),
 
         // Glaive Prime
         new("Glaive Prime Blueprint", "glaive prime blueprint"),
-		new("Glaive Prime Handle", "glaive prime handle"),
-		new("Glaive Prime Guard", "glaive prime guard"),
+		new("Glaive Prime Disc", "glaive prime disc"),
 		new("Glaive Prime Blade", "glaive prime blade"),
+
+        // Gram Prime
+        new("Gram Prime Blueprint", "gram prime blueprint"),
+		new("Gram Prime Handle", "gram prime handle"),
+		new("Gram Prime Blade", "gram prime blade"),
+
+        // Guandao Prime
+        new("Guandao Prime Blueprint", "guandao prime blueprint"),
+		new("Guandao Prime Handle", "guandao prime handle"),
+		new("Guandao Prime Blade", "guandao prime blade"),
 
         // Gunsen Prime
         new("Gunsen Prime Blueprint", "gunsen prime blueprint"),
 		new("Gunsen Prime Handle", "gunsen prime handle"),
-		new("Gunsen Prime Guard", "gunsen prime guard"),
 		new("Gunsen Prime Blade", "gunsen prime blade"),
 
-        // Gotva Prime
-        new("Gotva Prime Blueprint", "gotva prime blueprint"),
-		new("Gotva Prime Receiver", "gotva prime receiver"),
-		new("Gotva Prime Stock", "gotva prime stock"),
-		new("Gotva Prime Barrel", "gotva prime barrel"),
+		// Helios Prime
+        new("Helios Prime Blueprint", "helios prime blueprint"),
+		new("Helios Prime Carapace", "helios prime carapace"),
+		new("Helios Prime Cerebrum", "helios prime cerebrum"),
+		new("Helios Prime Systems", "helios prime systems"),
 
         // Hikou Prime
         new("Hikou Prime Blueprint", "hikou prime blueprint"),
-		new("Hikou Prime Receiver", "hikou prime receiver"),
-		new("Hikou Prime Barrel", "hikou prime barrel"),
-		new("Hikou Prime Handle", "hikou prime handle"),
+		new("Hikou Prime Pouch", "hikou prime pouch"),
+		new("Hikou Prime Stars", "hikou prime stars"),
 
         // Hystrix Prime
         new("Hystrix Prime Blueprint", "hystrix prime blueprint"),
 		new("Hystrix Prime Receiver", "hystrix prime receiver"),
 		new("Hystrix Prime Barrel", "hystrix prime barrel"),
-		new("Hystrix Prime Handle", "hystrix prime handle"),
 
         // Karyst Prime
         new("Karyst Prime Blueprint", "karyst prime blueprint"),
 		new("Karyst Prime Handle", "karyst prime handle"),
-		new("Karyst Prime Guard", "karyst prime guard"),
+		new("Karyst Prime Band", "karyst prime band"),
 		new("Karyst Prime Blade", "karyst prime blade"),
+		new("Karyst Prime Buckle", "karyst prime buckle"),
+
+        // Kavasa Prime
+        new("Kavasa Prime Band", "kavasa prime band"),
+		new("Kavasa Prime Buckle", "kavasa prime buckle"),
+		new("Kavasa Prime Kubrow Collar Blueprint", "kavasa prime kubrow collar blueprint"),
+
+        // Kestrel Prime
+        new("Kestrel Prime Blueprint", "kestrel prime blueprint"),
+		new("Kestrel Prime Blade", "kestrel prime blade"),
+		new("Kestrel Prime Grip", "kestrel prime grip"),
 
         // Knell Prime
         new("Knell Prime Blueprint", "knell prime blueprint"),
 		new("Knell Prime Receiver", "knell prime receiver"),
 		new("Knell Prime Barrel", "knell prime barrel"),
-		new("Knell Prime Handle", "knell prime handle"),
+
+        // Kogake Prime
+        new("Kogake Prime Blueprint", "kogake prime blueprint"),
+		new("Kogake Prime Boot", "kogake prime boot"),
+		new("Kogake Prime Gauntlet", "kogake prime gauntlet"),
+
+		// Kompressa Prime
+        new("Kompressa Prime Blueprint", "kompressa prime blueprint"),
+		new("Kompressa Prime Receiver", "kompressa prime receiver"),
+		new("Kompressa Prime Barrel", "kompressa prime barrel"),
+
+		// Kronen Prime
+        new("Kronen Prime Blueprint", "kronen prime blueprint"),
+		new("Kronen Prime Blade", "kronen prime blade"),
+		new("Kronen Prime Handle", "kronen prime handle"),
+
+        // Larkspur Prime
+        new("Larkspur Prime Blueprint", "larkspur prime blueprint"),
+		new("Larkspur Prime Receiver", "larkspur prime receiver"),
+		new("Larkspur Prime Stock", "larkspur prime stock"),
+		new("Larkspur Prime Barrel", "larkspur prime barrel"),
 
         // Latron Prime
         new("Latron Prime Blueprint", "latron prime blueprint"),
@@ -575,25 +621,21 @@ public static class RelicRewardPool
         new("Lex Prime Blueprint", "lex prime blueprint"),
 		new("Lex Prime Receiver", "lex prime receiver"),
 		new("Lex Prime Barrel", "lex prime barrel"),
-		new("Lex Prime Handle", "lex prime handle"),
 
         // Magnus Prime
         new("Magnus Prime Blueprint", "magnus prime blueprint"),
 		new("Magnus Prime Receiver", "magnus prime receiver"),
 		new("Magnus Prime Barrel", "magnus prime barrel"),
-		new("Magnus Prime Handle", "magnus prime handle"),
 
         // Masseter Prime
         new("Masseter Prime Blueprint", "masseter prime blueprint"),
 		new("Masseter Prime Handle", "masseter prime handle"),
-		new("Masseter Prime Guard", "masseter prime guard"),
 		new("Masseter Prime Blade", "masseter prime blade"),
 
         // Nami Skyla Prime
         new("Nami Skyla Prime Blueprint", "nami skyla prime blueprint"),
 		new("Nami Skyla Prime Handle", "nami skyla prime handle"),
-		new("Nami Skyla Prime Guard", "nami skyla prime guard"),
-		new("Nami Skyla Prime Tip", "nami skyla prime tip"),
+		new("Nami Skyla Prime Blade", "nami skyla prime blade"),
 
         // Nagantaka Prime
         new("Nagantaka Prime Blueprint", "nagantaka prime blueprint"),
@@ -601,28 +643,36 @@ public static class RelicRewardPool
 		new("Nagantaka Prime Stock", "nagantaka prime stock"),
 		new("Nagantaka Prime Barrel", "nagantaka prime barrel"),
 
+		// Nautilus Prime
+        new("Nautilus Prime Blueprint", "nautilus prime blueprint"),
+		new("Nautilus Prime Carapace", "nautilus prime carapace"),
+		new("Nautilus Prime Cerebrum", "nautilus prime cerebrum"),
+		new("Nautilus Prime Systems", "nautilus prime systems"),
+
         // Nikana Prime
         new("Nikana Prime Blueprint", "nikana prime blueprint"),
 		new("Nikana Prime Handle", "nikana prime handle"),
-		new("Nikana Prime Guard", "nikana prime guard"),
-		new("Nikana Prime Blade", "nikana prime blade"),
+		new("Nikana Prime Hilt", "nikana prime hilt"),
 
         // Ninkondi Prime
         new("Ninkondi Prime Blueprint", "ninkondi prime blueprint"),
 		new("Ninkondi Prime Handle", "ninkondi prime handle"),
-		new("Ninkondi Prime Guard", "ninkondi prime guard"),
-		new("Ninkondi Prime Blade", "ninkondi prime blade"),
+		new("Ninkondi Prime Chain", "ninkondi prime chain"),
+
+		// Odonata Prime
+        new("Odonata Prime Blueprint", "odonata prime blueprint"),
+		new("Odonata Prime Harness Blueprint", "odonata prime harness blueprint"),
+		new("Odonata Prime Systems Blueprint", "odonata prime systems blueprint"),
+		new("Odonata Prime Wings Blueprint", "odonata prime wings blueprint"),
 
         // Okina Prime
         new("Okina Prime Blueprint", "okina prime blueprint"),
 		new("Okina Prime Handle", "okina prime handle"),
-		new("Okina Prime Guard", "okina prime guard"),
 		new("Okina Prime Blade", "okina prime blade"),
 
         // Orthos Prime
         new("Orthos Prime Blueprint", "orthos prime blueprint"),
 		new("Orthos Prime Handle", "orthos prime handle"),
-		new("Orthos Prime Guard", "orthos prime guard"),
 		new("Orthos Prime Blade", "orthos prime blade"),
 
         // Panthera Prime
@@ -635,13 +685,18 @@ public static class RelicRewardPool
         new("Pandero Prime Blueprint", "pandero prime blueprint"),
 		new("Pandero Prime Receiver", "pandero prime receiver"),
 		new("Pandero Prime Barrel", "pandero prime barrel"),
-		new("Pandero Prime Handle", "pandero prime handle"),
+
+		// Pangolin Prime
+        new("Pangolin Prime Blueprint", "pangolin prime blueprint"),
+		new("Pangolin Prime Handle", "pangolin prime handle"),
+		new("Pangolin Prime Blade", "pangolin prime blade"),
 
         // Paris Prime
         new("Paris Prime Blueprint", "paris prime blueprint"),
-		new("Paris Prime Receiver", "paris prime receiver"),
-		new("Paris Prime Stock", "paris prime stock"),
-		new("Paris Prime Barrel", "paris prime barrel"),
+		new("Paris Prime Grip", "paris prime grip"),
+		new("Paris Prime Lower Limb", "paris prime lower limb"),
+		new("Paris Prime Upper Limb", "paris prime upper limb"),
+		new("Paris Prime String", "paris prime string"),
 
         // Phantasma Prime
         new("Phantasma Prime Blueprint", "phantasma prime blueprint"),
@@ -652,19 +707,21 @@ public static class RelicRewardPool
         // Pyrana Prime
         new("Pyrana Prime Blueprint", "pyrana prime blueprint"),
 		new("Pyrana Prime Receiver", "pyrana prime receiver"),
-		new("Pyrana Prime Stock", "pyrana prime stock"),
 		new("Pyrana Prime Barrel", "pyrana prime barrel"),
 
         // Quassus Prime
         new("Quassus Prime Blueprint", "quassus prime blueprint"),
 		new("Quassus Prime Handle", "quassus prime handle"),
-		new("Quassus Prime Guard", "quassus prime guard"),
 		new("Quassus Prime Blade", "quassus prime blade"),
+
+        // Reaper Prime
+        new("Reaper Prime Blueprint", "reaper prime blueprint"),
+		new("Reaper Prime Handle", "reaper prime handle"),
+		new("Reaper Prime Blade", "reaper prime blade"),
 
         // Redeemer Prime
         new("Redeemer Prime Blueprint", "redeemer prime blueprint"),
-		new("Redeemer Prime Receiver", "redeemer prime receiver"),
-		new("Redeemer Prime Barrel", "redeemer prime barrel"),
+		new("Redeemer Prime Handle", "redeemer prime handle"),
 		new("Redeemer Prime Blade", "redeemer prime blade"),
 
         // Rubico Prime
@@ -676,18 +733,28 @@ public static class RelicRewardPool
         // Scindo Prime
         new("Scindo Prime Blueprint", "scindo prime blueprint"),
 		new("Scindo Prime Handle", "scindo prime handle"),
-		new("Scindo Prime Guard", "scindo prime guard"),
 		new("Scindo Prime Blade", "scindo prime blade"),
 
         // Scourge Prime
         new("Scourge Prime Blueprint", "scourge prime blueprint"),
-		new("Scourge Prime Receiver", "scourge prime receiver"),
-		new("Scourge Prime Stock", "scourge prime stock"),
+		new("Scourge Prime Barrel", "scourge prime barrel"),
+		new("Scourge Prime Handle", "scourge prime handle"),
 		new("Scourge Prime Blade", "scourge prime blade"),
+
+		// Shade Prime
+        new("Shade Prime Blueprint", "shade prime blueprint"),
+		new("Shade Prime Carapace", "shade prime carapace"),
+		new("Shade Prime Cerebrum", "shade prime cerebrum"),
+		new("Shade Prime Systems", "shade prime systems"),
+
+        // Sicarus Prime
+        new("Sicarus Prime Blueprint", "sicarus prime blueprint"),
+		new("Sicarus Prime Receiver", "sicarus prime receiver"),
+		new("Sicarus Prime Barrel", "sicarus prime barrel"),
 
         // Silva & Aegis Prime
         new("Silva & Aegis Prime Blueprint", "silva & aegis prime blueprint"),
-		new("Silva & Aegis Prime Handle", "silva & aegis prime handle"),
+		new("Silva & Aegis Prime Hilt", "silva & aegis prime hilt"),
 		new("Silva & Aegis Prime Guard", "silva & aegis prime guard"),
 		new("Silva & Aegis Prime Blade", "silva & aegis prime blade"),
 
@@ -699,9 +766,8 @@ public static class RelicRewardPool
 
         // Spira Prime
         new("Spira Prime Blueprint", "spira prime blueprint"),
-		new("Spira Prime Receiver", "spira prime receiver"),
-		new("Spira Prime Stock", "spira prime stock"),
-		new("Spira Prime Barrel", "spira prime barrel"),
+		new("Spira Prime Blade", "spira prime blade"),
+		new("Spira Prime Pouch", "spira prime pouch"),
 
         // Stradavar Prime
         new("Stradavar Prime Blueprint", "stradavar prime blueprint"),
@@ -724,8 +790,12 @@ public static class RelicRewardPool
         // Tatsu Prime
         new("Tatsu Prime Blueprint", "tatsu prime blueprint"),
 		new("Tatsu Prime Handle", "tatsu prime handle"),
-		new("Tatsu Prime Guard", "tatsu prime guard"),
 		new("Tatsu Prime Blade", "tatsu prime blade"),
+
+		// Tekko Prime
+		new("Tekko Prime Blueprint", "tekko prime blueprint"),
+		new("Tekko Prime Gauntlet", "tekko prime gauntlet"),
+		new("Tekko Prime Blade", "tekko prime blade"),
 
         // Tenora Prime
         new("Tenora Prime Blueprint", "tenora prime blueprint"),
@@ -748,8 +818,7 @@ public static class RelicRewardPool
         // Tipedo Prime
         new("Tipedo Prime Blueprint", "tipedo prime blueprint"),
 		new("Tipedo Prime Handle", "tipedo prime handle"),
-		new("Tipedo Prime Guard", "tipedo prime guard"),
-		new("Tipedo Prime Blade", "tipedo prime blade"),
+		new("Tipedo Prime Ornament", "tipedo prime ornament"),
 
         // Trumna Prime
         new("Trumna Prime Blueprint", "trumna prime blueprint"),
@@ -757,17 +826,32 @@ public static class RelicRewardPool
 		new("Trumna Prime Stock", "trumna prime stock"),
 		new("Trumna Prime Barrel", "trumna prime barrel"),
 
+		// Vadarya Prime
+		new("Vadarya Prime Blueprint", "vadarya prime blueprint"),
+		new("Vadarya Prime Receiver", "vadarya prime receiver"),
+		new("Vadarya Prime Stock", "vadarya prime stock"),
+		new("Vadarya Prime Barrel", "vadarya prime barrel"),
+
         // Vasto Prime
         new("Vasto Prime Blueprint", "vasto prime blueprint"),
 		new("Vasto Prime Receiver", "vasto prime receiver"),
 		new("Vasto Prime Barrel", "vasto prime barrel"),
-		new("Vasto Prime Handle", "vasto prime handle"),
+
+		// Vectis Prime
+		new("Vectis Prime Blueprint", "vectis prime blueprint"),
+		new("Vectis Prime Receiver", "vectis prime receiver"),
+		new("Vectis Prime Stock", "vectis prime stock"),
+		new("Vectis Prime Barrel", "vectis prime barrel"),
 
         // Velox Prime
         new("Velox Prime Blueprint", "velox prime blueprint"),
 		new("Velox Prime Receiver", "velox prime receiver"),
-		new("Velox Prime Stock", "velox prime stock"),
 		new("Velox Prime Barrel", "velox prime barrel"),
+
+		// Venato Prime
+		new("Venato Prime Blueprint", "venato prime blueprint"),
+		new("Venato Prime Blade", "venato prime blade"),
+		new("Venato Prime Handle", "venato prime handle"),
 
         // Vectis Prime
         new("Vectis Prime Blueprint", "vectis prime blueprint"),
@@ -775,16 +859,42 @@ public static class RelicRewardPool
 		new("Vectis Prime Stock", "vectis prime stock"),
 		new("Vectis Prime Barrel", "vectis prime barrel"),
 
+		// Velox Prime
+		new("Velox Prime Blueprint", "velox prime blueprint"),
+		new("Velox Prime Receiver", "velox prime receiver"),
+		new("Velox Prime Barrel", "velox prime barrel"),
+
+		// Venka Prime
+		new("Venka Prime Blueprint", "venka prime blueprint"),
+		new("Venka Prime Gauntlet", "venka prime gauntlet"),
+		new("Venka Prime Blades", "venka prime blades"),
+
         // Volnus Prime
         new("Volnus Prime Blueprint", "volnus prime blueprint"),
-		new("Volnus Prime Receiver", "volnus prime receiver"),
-		new("Volnus Prime Stock", "volnus prime stock"),
-		new("Volnus Prime Barrel", "volnus prime barrel"),
+		new("Volnus Prime Handle", "volnus prime handle"),
+		new("Volnus Prime Head", "volnus prime head"),
+
+		// Wyrm Prime
+		new("Wyrm Prime Blueprint", "wyrm prime blueprint"),
+		new("Wyrm Prime Carapace", "wyrm prime carapace"),
+		new("Wyrm Prime Cerebrum", "wyrm prime cerebrum"),
+		new("Wyrm Prime Systems", "wyrm prime systems"),
+
+		// Zakti Prime
+		new("Zakti Prime Blueprint", "zakti prime blueprint"),
+		new("Zakti Prime Receiver", "zakti prime receiver"),
+		new("Zakti Prime Barrel", "zakti prime barrel"),
 
         // Zhuge Prime
         new("Zhuge Prime Blueprint", "zhuge prime blueprint"),
 		new("Zhuge Prime Receiver", "zhuge prime receiver"),
-		new("Zhuge Prime Stock", "zhuge prime stock"),
+		new("Zhuge Prime Grip", "zhuge prime grip"),
 		new("Zhuge Prime Barrel", "zhuge prime barrel"),
+		new("Zhuge Prime String", "zhuge prime string"),
+
+		// Zylok Prime
+		new("Zylok Prime Blueprint", "zylok prime blueprint"),
+		new("Zylok Prime Receiver", "zylok prime receiver"),
+		new("Zylok Prime Barrel", "zylok prime barrel")
 	};
 }
