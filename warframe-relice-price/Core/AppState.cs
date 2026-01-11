@@ -9,8 +9,7 @@ namespace warframe_relice_price.Core
     enum AppState
     {
         Idle,
-        InGame,
-        InMission,
-        RewardScreen
+        InWarframe,
+        Reward,
     }
 }

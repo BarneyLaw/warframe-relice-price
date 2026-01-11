@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace warframe_relice_price.Utils
 {
-    static class Win32
+    public static class Win32
     {
         public const int GWL_EXSTYLE = -20;
         public const int WS_EX_TRANSPARENT = 0x00000020;
@@ -29,6 +29,9 @@ namespace warframe_relice_price.Utils
 
         [DllImport("user32.dll")]
         public static extern bool GetWindowRect(IntPtr hWnd, out RECT rect);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetForegroundWindow();
 
         public struct RECT
         {
