@@ -1,11 +1,9 @@
 ﻿using System.Windows;
 using warframe_relice_price.Core;
 using warframe_relice_price.Utils;
-using Rewards.Examples;
 
+namespace warframe_relice_price;
 
-namespace warframe_relice_price
-{
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
@@ -31,9 +29,7 @@ namespace warframe_relice_price
         {
             base.OnStartup(e);
 
-            RewardCountingExample.Run(); // call it here for now
-
-            /* Logger.Log("Overlay starting up.");
+            Logger.Log("Overlay starting up.");
 
             var window = new MainWindow();
             MainWindow = window;
@@ -41,9 +37,8 @@ namespace warframe_relice_price
             Logger.Log("Main window shown.");
 
             appController = new AppController(window);
-            appController.startLoop();
-            */
+            appController.startLoop();           
         }
     }
 
-}
+

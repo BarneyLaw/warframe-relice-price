@@ -9,7 +9,7 @@ using warframe_relice_price.WarframeTracker;
 
 namespace warframe_relice_price.Core
 {
-    class AppController
+    class AppController 
     {
         private readonly MainWindow _window;
         private readonly OverlayRenderer _overlayRenderer;
@@ -85,7 +85,7 @@ namespace warframe_relice_price.Core
             _hasCapturedStableReward = false;
         }
 
-        private void OnTick(object sender, EventArgs e)
+        private async void OnTick(object sender, EventArgs e)
         {
             // Update PID + raise WarframeStarted/WarframeStopped events based on polling.
             if (WarframeProcess.TryUpdateFromPolling())
@@ -220,7 +220,7 @@ namespace warframe_relice_price.Core
             _rewardScreenMisses = 0;
         }
 
-        private void captureStableReward()
+        private async void captureStableReward()
         {
             var screenRowRect = ScreenCaptureRow.ToScreenRect(ScreenCaptureRow.row_rect);
             using var bmp = ScreenCaptureRow.captureRegion(screenRowRect);
@@ -228,8 +228,9 @@ namespace warframe_relice_price.Core
             ImageToText.saveDebugImage(gray, "reward_row_gray");
             ImageToText.saveDebugImage(bmp, "reward_row_raw");
             string rowText = ImageToText.multiPassOCR(bmp);
+			await _overlayRenderer.DrawAllAsync(_window.Width, _window.Height, 4);
 
-            Logger.Log($"OCR(reward row) = '{rowText}'");
+			Logger.Log($"OCR(reward row) = '{rowText}'");
         }
     }
 }
