@@ -50,4 +50,33 @@ public static class RewardMatcher
 			}
 		}
 	}
+
+	public static RelicRewardItem? matchSingle(string ocrText)
+	{
+        string text = OcrNormalizer.Normalize(ocrText);
+        var words = text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        RelicRewardItem? bestMatch = null;
+        int bestScore = 0;
+
+        // Try sequences of words from length 1 up to max (e.g., 5)
+        for (int length = 1; length <= 5 && length <= words.Length; length++)
+        {
+            string segment = string.Join(' ', words[..length]);
+
+            foreach (var item in RelicRewardPool.All)
+            {
+                int score = Fuzz.TokenSetRatio(segment, item.CanonicalName);
+
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    bestMatch = item;
+                }
+            }
+        }
+
+        return (bestMatch != null && bestScore >= MatchThreshold) ? bestMatch : null;
+
+    }
 }

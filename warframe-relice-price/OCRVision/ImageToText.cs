@@ -64,6 +64,17 @@ namespace warframe_relice_price.OCRVision
 
         }
 
+        public static string singleBoxOCR(int boxIndex)
+        {
+            var box = ScreenCaptureRow.get_box_rect(boxIndex);
+            var screenBox = ScreenCaptureRow.ToScreenRect(box);
+            using var bmp = ScreenCaptureRow.captureRegion(screenBox);
+            var item = ImageToText.multiPassOCR(bmp);
+            saveDebugImage(bmp, $"reward_box_{boxIndex}");
+
+            return item;
+        }
+
         public static void saveDebugImage(Bitmap img, string tag)
         {
             string debugDir = Path.Combine(AppContext.BaseDirectory, "debug_images");

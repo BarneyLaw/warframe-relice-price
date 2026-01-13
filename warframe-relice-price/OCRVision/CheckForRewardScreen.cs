@@ -45,25 +45,21 @@ namespace warframe_relice_price.OCRVision
             return count;
         }
 
-        public static void CountRewards()
+        public static int CountRewards()
         {
             List<string> rewards = new();
 
             for (int i = 1; i <= 4; i++)
             {
-                var box = ScreenCaptureRow.get_box_rect(i);
-                var screenBox = ScreenCaptureRow.ToScreenRect(box);
-
-                using var bmp = ScreenCaptureRow.captureRegion(screenBox);
-                ImageToText.saveDebugImage(bmp, $"reward_box_{i}");
-                string text = ImageToText.multiPassOCR(bmp);
-
+                string text = ImageToText.singleBoxOCR(i);
                 rewards.Add(text);
             }
 
             int rewardCount = DetectRewardCount(rewards);
 
             Logger.Log($"Detected {rewardCount} rewards");
+
+            return rewardCount;
         }
     }
 }

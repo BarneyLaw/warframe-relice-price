@@ -4,8 +4,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
-
+using Rewards.Matching;
+using Rewards.Processing;
+using Rewards.Services;
 using warframe_relice_price.OCRVision;
+using warframe_relice_price.Utils;
+using warframe_relice_price.WarframeTracker;
 
 namespace warframe_relice_price.OverlayUI
 {
@@ -21,9 +25,13 @@ namespace warframe_relice_price.OverlayUI
 		}
 
         // Replace this later with actual rendering logic
-        public void DrawFakeRelicPrices(double width, double height, int slots)
+        public void DrawRelicPrices(List<int?> prices)
         {
-            //_overlayCanvas.Children.Clear();
+            _overlayCanvas.Children.Clear();
+            int width = WarframeWindowInfo.Width;
+            int height = WarframeWindowInfo.Height;
+
+            int slots = prices.Count;
 
             if (width <= 0 || height <= 0) return;
 
@@ -34,35 +42,28 @@ namespace warframe_relice_price.OverlayUI
             double startX = (width - totalRowWidth) / 2;
             double slotWidth = totalRowWidth / slots;
 
-			var screenRowRect = ScreenCaptureRow.ToScreenRect(ScreenCaptureRow.row_rect);
-			using var bmp = ScreenCaptureRow.captureRegion(screenRowRect);
-
-			string ocrText = ImageToText.multiPassOCR(bmp);
-			var items = RewardCounter.Count(ocrText);
+			// string ocrText = ImageToText.multiPassOCR(bmp);
+			// var items = RewardCounter.Count(ocrText);
 
 			for (int i = 0; i < slots; i++)
 			{
 				double slotX = startX + i * slotWidth;
-				string displayText = "—";
 
-				if (i < items.Count)
-				{
-					string urlName = WarframeMarketNaming.ToUrlName(items[i].CanonicalName);
-					Console.WriteLine(urlName);
-					int? price = _marketClient.GetLowestPrice(urlName);
-					displayText = price is null ? "No listings" : $"{price}p";
-				}
+                string displayText = "—";
 
-				var priceText = new TextBlock
+                int? price = prices[i];
+				displayText = price is null ? "No listings" : $"{price}p";
+
+                var priceText = new TextBlock
 				{
 					Text = displayText,
 					FontWeight = FontWeights.Bold,
-					Foreground = Brushes.Gold,
+					Foreground = System.Windows.Media.Brushes.Gold,
 					FontSize = height * 0.018,
 					TextAlignment = TextAlignment.Center
 				};
 
-				priceText.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+				priceText.Measure(new System.Windows.Size(double.PositiveInfinity, double.PositiveInfinity));
 
 				Canvas.SetLeft(priceText, slotX + (slotWidth - priceText.DesiredSize.Width) / 2);
 				Canvas.SetTop(priceText, priceOffsetY);
@@ -72,7 +73,6 @@ namespace warframe_relice_price.OverlayUI
 				// --- Remove after 15 seconds ---
 				_ = RemoveAfterDelayAsync(priceText, 15000);
 			}
-			return Task.CompletedTask;
 		}
 
 		// Helper to remove a TextBlock after a delay
@@ -91,17 +91,18 @@ namespace warframe_relice_price.OverlayUI
 		// Debug / boundary visualization
 		public void DrawTestBoundary()
 		{
-			var detectionRect = new Rectangle
+			var detectionRect = new System.Windows.Shapes.Rectangle
 			{
 				Width = ScreenCaptureRow.detection_box_width,
 				Height = ScreenCaptureRow.detection_box_height,
-				Stroke = Brushes.Red,
+				Stroke = System.Windows.Media.Brushes.Red,
 				StrokeThickness = 2,
-				Fill = Brushes.Transparent
+				Fill = System.Windows.Media.Brushes.Transparent
 			};
 
 			Canvas.SetLeft(detectionRect, ScreenCaptureRow.detection_box_x_coordinate);
 			Canvas.SetTop(detectionRect, ScreenCaptureRow.detection_box_y_coordinate);
+            _overlayCanvas.Children.Add(detectionRect);
 
             // Reward Row Box
             //var rowRect = new System.Windows.Shapes.Rectangle
@@ -153,6 +154,7 @@ namespace warframe_relice_price.OverlayUI
 
             _overlayCanvas.Children.Add(r);
         }
+
         public void DrawItemsName(string text)
         {
             var itemNameText = new TextBlock
@@ -172,7 +174,6 @@ namespace warframe_relice_price.OverlayUI
             _overlayCanvas.Children.Clear();
 
             DrawTestBoundary();
-            DrawDebugRewardBoxes();
         }
     }
 
