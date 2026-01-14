@@ -230,9 +230,10 @@ namespace warframe_relice_price.Core
             string rowText = ImageToText.multiPassOCR(bmp);
 
             // Maybe we can use another method to count rewards here?
-            int numRewards = RewardCounter.Count(rowText).Count;
+            // int numRewards = RewardCounter.Count(rowText).Count;
+            int numRewards = CheckForRewardScreen.CountRewards();
             Logger.Log($"Capturing stable reward with {numRewards} rewards.");
-            // int numRewards = CheckForRewardScreen.CountRewards();
+            
             List<int?> prices = new List<int?>();
 
             for (int i = 0; i < numRewards; i++)
