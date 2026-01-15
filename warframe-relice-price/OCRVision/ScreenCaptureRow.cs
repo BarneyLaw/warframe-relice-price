@@ -10,73 +10,58 @@ namespace warframe_relice_price.OCRVision
     {
 
         // Dimensions for the Detection Box that determines Reward Screen Status
-        public static int detection_box_x_coordinate = (int) (0.0729 * WarframeWindowInfo.Width);
-        public static int detection_box_y_coordinate = (int) (0.0324 * WarframeWindowInfo.Height);
-        public static int detection_box_width = (int) (0.401 * WarframeWindowInfo.Width);
-        public static int detection_box_height = (int) (0.0602 * WarframeWindowInfo.Height);
-
-        public static Rectangle detection_box_rect = new Rectangle(
-            detection_box_x_coordinate,
-            detection_box_y_coordinate,
-            detection_box_width,
-            detection_box_height
-        );
+        public static Rectangle GetDetectionBoxPx()
+        {
+            return new Rectangle(
+                (int)(0.0729 * WarframeWindowInfo.WidthPx),
+                (int)(0.0324 * WarframeWindowInfo.HeightPx),
+                (int)(0.401 * WarframeWindowInfo.WidthPx),
+                (int)(0.0602 * WarframeWindowInfo.HeightPx)
+            );
+        }
 
         // Dimensions for the whole Reward row
-        public static int row_x_coordinate = (int) (0.20 * WarframeWindowInfo.Width);
-        public static int row_y_coordinate = (int) (0.379 * WarframeWindowInfo.Height);
-        public static int row_width = (int) (0.55 * WarframeWindowInfo.Width);
-        public static int row_height = (int) (0.056 * WarframeWindowInfo.Height);
-
-        public static Rectangle row_rect = new Rectangle(
-            row_x_coordinate,
-            row_y_coordinate,
-            row_width,
-            row_height
-        );
+        public static Rectangle GetRewardRowPx()
+        {
+            return new Rectangle(
+                (int)(0.20 * WarframeWindowInfo.WidthPx),
+                (int)(0.379 * WarframeWindowInfo.HeightPx),
+                (int)(0.55 * WarframeWindowInfo.WidthPx),
+                (int)(0.056 * WarframeWindowInfo.HeightPx)
+            );
+        }
 
         // Dimensions for invidual boxes (n = 1 to 4)
-
-        public static int box_width = (int) (0.125 * WarframeWindowInfo.Width);
-        public static int box_height = row_height;
-        public static int box_x_coordinate = (int) (0.247 * WarframeWindowInfo.Width);
-        public static int box_y_coordinate = row_y_coordinate;
-
-        public static Rectangle get_box_rect(int n)
+        public static Rectangle GetRewardBoxPx(int index, int totalRewards)
         {
-            int offset = n > 0 ? 5 : 0;
+            const int gapPx = 5;
+
+            int boxWidth = (int)(0.125 * WarframeWindowInfo.WidthPx);
+            int boxHeight = (int)(0.056 * WarframeWindowInfo.HeightPx);
+
+            int totalWidth =
+                totalRewards * boxWidth +
+                (totalRewards - 1) * gapPx;
+
+            int startX = (WarframeWindowInfo.WidthPx - totalWidth) / 2;
+
             return new Rectangle(
-                box_x_coordinate + (n - 1) * box_width + offset,
-                box_y_coordinate,
-                box_width,
-                box_height
+                startX + (index - 1) * (boxWidth + gapPx),
+                (int)(0.379 * WarframeWindowInfo.HeightPx),
+                boxWidth,
+                boxHeight
             );
         }
 
-        public static Rectangle getMiniRewardBox(int n, int numRewards)
-        {
-            int offset = n > 0 ? 5 : 0;
-            int totalWidth = box_width * numRewards + (offset - 1) * numRewards;
-            int x_offset = (WarframeWindowInfo.Width - totalWidth) / 2;
-            return new Rectangle(
-                x_offset + (n - 1) * box_width + offset,
-                box_y_coordinate,
-                box_width,
-                box_height
-            );
-
-        }
-
-        public static Rectangle ToScreenRect(Rectangle overlayRect)
+        public static Rectangle ToScreenRect(Rectangle pxRect)
         {
             return new Rectangle(
-                WarframeWindowInfo.XOffset + overlayRect.X,
-                WarframeWindowInfo.YOffset + overlayRect.Y,
-                overlayRect.Width,
-                overlayRect.Height
+                WarframeWindowInfo.XOffsetPx + pxRect.X,
+                WarframeWindowInfo.YOffsetPx + pxRect.Y,
+                pxRect.Width,
+                pxRect.Height
             );
         }
-
         /// <summary>
         /// Captures an image of a region on screen.
         /// </summary>
