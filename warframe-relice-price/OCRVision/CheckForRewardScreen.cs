@@ -23,7 +23,7 @@ namespace warframe_relice_price.OCRVision
 
         public static bool TryDetectRewardScreen(out string detectionText)
         {
-            var overlayRect = ScreenCaptureRow.detection_box_rect;
+            var overlayRect = ScreenCaptureRow.GetDetectionBoxPx();
             var screenRect = ScreenCaptureRow.ToScreenRect(overlayRect);
 
             using Bitmap bmp = ScreenCaptureRow.captureRegion(screenRect);

@@ -63,6 +63,25 @@ namespace warframe_relice_price.Core
             }
         }
 
+        // Sets the overlay window's position and size to match the Monitor DPI
+        private void SetOverlayWindowPositionAndSize(Win32.RECT rect)
+        {
+            // Get DPI scaling for the current window
+            var source = PresentationSource.FromVisual(_window);
+            double dpiX = 1.0, dpiY = 1.0;
+            if (source != null)
+            {
+                dpiX = source.CompositionTarget.TransformToDevice.M11;
+                dpiY = source.CompositionTarget.TransformToDevice.M22;
+            }
+
+            // Convert screen coordinates to WPF device-independent units
+            _window.Left = rect.Left / dpiX;
+            _window.Top = rect.Top / dpiY;
+            _window.Width = (rect.Right - rect.Left) / dpiX;
+            _window.Height = (rect.Bottom - rect.Top) / dpiY;
+        }
+
         // Starts the main loop to track Warframe window and update overlay
         public void startLoop()
         {
@@ -122,10 +141,13 @@ namespace warframe_relice_price.Core
 
             if (_tracker.TryGetBounds(_warframeHwnd, out var rect))
             {
-                _window.Left = rect.Left;
-                _window.Top = rect.Top;
-                _window.Width = rect.Right - rect.Left;
-                _window.Height = rect.Bottom - rect.Top;
+                var source = PresentationSource.FromVisual(_window);
+                double dpiX = source?.CompositionTarget.TransformToDevice.M11 ?? 1.0;
+                double dpiY = source?.CompositionTarget.TransformToDevice.M22 ?? 1.0;
+
+                WarframeWindowInfo.UpdateFromRect(rect, dpiX, dpiY);
+
+                SetOverlayWindowPositionAndSize(rect);
 
                 if (_state == AppState.Idle)
                 {
@@ -210,7 +232,7 @@ namespace warframe_relice_price.Core
                         ResetToInWarframe();
                     }
                 }
-                //_overlayRenderer.DrawTestBoundary();
+                _overlayRenderer.DrawAll();
                 //_overlayRenderer.DrawAll(_window.Width, _window.Height, 4);
             }
         }
@@ -225,9 +247,9 @@ namespace warframe_relice_price.Core
 
         private void captureStableReward()
         {
-            var screenRowRect = ScreenCaptureRow.ToScreenRect(ScreenCaptureRow.row_rect);
-            using var bmp = ScreenCaptureRow.captureRegion(screenRowRect);
-            string rowText = ImageToText.multiPassOCR(bmp);
+            // var screenRowRect = ScreenCaptureRow.ToScreenRect(ScreenCaptureRow.GetRewardRowPx());
+            // using var bmp = ScreenCaptureRow.captureRegion(screenRowRect);
+            // string rowText = ImageToText.multiPassOCR(bmp);
 
             // Maybe we can use another method to count rewards here?
             // int numRewards = RewardCounter.Count(rowText).Count;

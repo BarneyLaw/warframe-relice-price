@@ -5,19 +5,36 @@ namespace warframe_relice_price.WarframeTracker
 {
     public static class WarframeWindowInfo
     {
-        public static int XOffset => GetRect().Left;
-        public static int YOffset => GetRect().Top;
-        public static int Width => GetRect().Right - GetRect().Left;
-        public static int Height => GetRect().Bottom - GetRect().Top;
+        // WPF (DIPs)
+        public static double WidthDip { get; private set; }
+        public static double HeightDip { get; private set; }
+        public static double XOffsetDip { get; private set; }
+        public static double YOffsetDip { get; private set; }
 
-        public static Win32.RECT GetRect()
+        // Physical pixels (for screen capture)
+        public static int WidthPx { get; private set; }
+        public static int HeightPx { get; private set; }
+        public static int XOffsetPx { get; private set; }
+        public static int YOffsetPx { get; private set; }
+
+        // DPI scale (pixels per DIP)
+        public static double DpiX { get; private set; }
+        public static double DpiY { get; private set; }
+
+        public static void UpdateFromRect(Win32.RECT rect, double dpiX, double dpiY)
         {
-            var tracker = new WarframeWindowTracker();
-            var hwnd = tracker.GetWarframeWindow();
-            if (hwnd != IntPtr.Zero && tracker.TryGetBounds(hwnd, out var rect))
-                return rect;
-            // Fallback: return a default rect if not found
-            return new Win32.RECT { Left = 0, Top = 0, Right = 0, Bottom = 0 };
+            WidthPx = rect.Right - rect.Left;
+            HeightPx = rect.Bottom - rect.Top;
+            XOffsetPx = rect.Left;
+            YOffsetPx = rect.Top;
+
+            DpiX = dpiX;
+            DpiY = dpiY;
+
+            WidthDip = WidthPx / dpiX;
+            HeightDip = HeightPx / dpiY;
+            XOffsetDip = rect.Left / dpiX;
+            YOffsetDip = rect.Top / dpiY;
         }
     }
 }

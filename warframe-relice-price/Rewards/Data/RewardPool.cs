@@ -320,7 +320,6 @@ public static class RelicRewardPool
 
         // Akbronco Prime
         new("Akbronco Prime Blueprint", "akbronco prime blueprint"),
-		new("Akbronco Prime Barrel", "akbronco prime barrel"),
 		new("Akbronco Prime Link", "akbronco prime link"),
 
         // Akjagara Prime
