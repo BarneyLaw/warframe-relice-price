@@ -40,19 +40,19 @@ namespace warframe_relice_price.OCRVision
         {
             var results = new List<ValueTuple<string, int>>();
 
-            string raw = ImageToText.ConvertImageToText(original);
+            string raw = ConvertImageToText(original);
             results.Add((raw, ScoreText(raw)));
 
-            string gray = ImageToText.ConvertImageToText(ScreenCaptureRow.toGrayScale(original));
+            string gray = ConvertImageToText(ScreenCaptureRow.toGrayScale(original));
             results.Add((gray, ScoreText(gray)));
 
-            string grayThresh = ImageToText.ConvertImageToText(
+            string grayThresh = ConvertImageToText(
                 ScreenCaptureRow.Threshold(
                     ScreenCaptureRow.toGrayScale(original), 160));
 
             results.Add((grayThresh, ScoreText(grayThresh)));
 
-            string grayThresh2 = ImageToText.ConvertImageToText(
+            string grayThresh2 = ConvertImageToText(
                 ScreenCaptureRow.Threshold(
                     ScreenCaptureRow.toGrayScale(original), 160));
 
@@ -70,7 +70,7 @@ namespace warframe_relice_price.OCRVision
             var screenBox = ScreenCaptureRow.ToScreenRect(box);
             using var bmp = ScreenCaptureRow.captureRegion(screenBox);
             var item = multiPassOCR(bmp);
-            saveDebugImage(bmp, $"reward_box_{boxIndex}");
+            // saveDebugImage(bmp, $"reward_box_{boxIndex}");
 
             return item;
         }

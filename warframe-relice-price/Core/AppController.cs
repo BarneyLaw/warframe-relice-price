@@ -244,6 +244,17 @@ namespace warframe_relice_price.Core
             _rewardScreenMisses = 0;
         }
 
+        private void DoEvents()
+        {
+            var frame = new DispatcherFrame();
+            Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Background, new DispatcherOperationCallback(delegate (object f)
+            {
+                ((DispatcherFrame)f).Continue = false;
+                return null;
+            }), frame);
+            Dispatcher.PushFrame(frame);
+        }
+
         private void captureStableReward()
         {
             // var screenRowRect = ScreenCaptureRow.ToScreenRect(ScreenCaptureRow.GetRewardRowPx());
@@ -252,6 +263,8 @@ namespace warframe_relice_price.Core
 
             // Maybe we can use another method to count rewards here?
             // int numRewards = RewardCounter.Count(rowText).Count;
+            DoEvents();
+
             int numRewards = CheckForRewardScreen.CountRewards();
             Logger.Log($"Capturing stable reward with {numRewards} rewards.");
             
@@ -263,6 +276,9 @@ namespace warframe_relice_price.Core
                 _prices.Add(price);
             }
             Logger.Log($"Captured {_prices.Count} prices.");
+
+            _overlayRenderer.ShowLoadingIndicator();
+            _overlayRenderer.HideLoadingIndicator();
 
         }
     }

@@ -11,6 +11,7 @@ namespace warframe_relice_price.OverlayUI
 	class OverlayRenderer
 	{
 		private readonly Canvas _overlayCanvas;
+        private TextBlock _loadingTextBlock;
 
 		public OverlayRenderer(Canvas overlayCanvas)
 		{
@@ -254,6 +255,37 @@ namespace warframe_relice_price.OverlayUI
 
             _overlayCanvas.Children.Add(text);
             _overlayCanvas.Children.Add(circle);
+        }
+
+        public void ShowLoadingIndicator()
+        {
+            if (_loadingTextBlock != null) return; // Already shown
+
+            _loadingTextBlock = new TextBlock
+            {
+                Text = "Loading...",
+                FontWeight = FontWeights.Bold,
+                Foreground = Brushes.White,
+                FontSize = 24,
+                Background = new SolidColorBrush(Color.FromArgb(128, 0, 0, 0)),
+                TextAlignment = TextAlignment.Center
+            };
+            _loadingTextBlock.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            double x = (_overlayCanvas.ActualWidth - _loadingTextBlock.DesiredSize.Width) / 2;
+            double y = (_overlayCanvas.ActualHeight - _loadingTextBlock.DesiredSize.Height) / 2;
+            Canvas.SetLeft(_loadingTextBlock, x);
+            Canvas.SetTop(_loadingTextBlock, y);
+
+            _overlayCanvas.Children.Add(_loadingTextBlock);
+        }
+
+        public void HideLoadingIndicator()
+        {
+            if (_loadingTextBlock != null)
+            {
+                _overlayCanvas.Children.Remove(_loadingTextBlock);
+                _loadingTextBlock = null;
+            }
         }
 
         public void DrawAll()
