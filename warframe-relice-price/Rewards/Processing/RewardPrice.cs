@@ -1,38 +1,38 @@
 ﻿using Rewards.Matching;
 using Rewards.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using warframe_relice_price.OCRVision;
 using warframe_relice_price.Utils;
 
-namespace Rewards.Processing;
+namespace Rewards.Processing
+{
+	public static class RewardPrice
+	{
+		private static readonly WarframeMarketClient wClient = new();
 
-    public static class RewardPrice
-    {
-        static readonly WarframeMarketClient wClient = new WarframeMarketClient();
+		public static async Task<int?> getPriceForItemAsync(int index, int numRewards)
+		{
+			string ocrText = ImageToText.singleBoxOCR(index + 1, numRewards);
+			Logger.Log($"OCR Text for reward {index}: {ocrText}");
 
-        public static int? getPriceForItem(int index, int numRewards)
-        {
-        var ocrText = ImageToText.singleBoxOCR(index + 1, numRewards);
+			var item = RewardMatcher.matchSingle(ocrText);
+			if (item == null)
+			{
+				Logger.Log($"No fuzzy match found for OCR text: {ocrText}");
+				return null;
+			}
 
-        Logger.Log($"OCR Text: {ocrText}, Sending for fuzzy matching");
+			Logger.Log($"Fuzzy matching result: {item.CanonicalName}");
 
-        var item = RewardMatcher.matchSingle(ocrText);
+			string urlName = WarframeMarketNaming.ToUrlName(item.CanonicalName);
 
-        Logger.Log($"Fuzzy Matching result: {item.CanonicalName}");
+			int? price = await wClient.GetLowestPriceAsync(urlName);
 
-        string urlName = WarframeMarketNaming.ToUrlName(item.CanonicalName);
+			Logger.Log($"Fetched price: {price?.ToString() ?? "No listings"} plat");
 
-        var price = wClient.GetLowestPrice(urlName);
-
-        Logger.Log($"Fetched price for item {index}, {urlName} -> {price} plat");
-
-        return price;
-
-
-        }
-    }
+			return price;
+		}
+	}
+}
 

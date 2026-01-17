@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using warframe_relice_price.Utils;
+using System.Diagnostics;
 
 namespace warframe_relice_price.OCRVision
 {
@@ -21,29 +22,33 @@ namespace warframe_relice_price.OCRVision
             return normalizedText.Contains("REWARD") || normalizedText.Contains("REWARDS");
         }
 
+   
+
         public static bool TryDetectRewardScreen(out string detectionText)
-        {
-            var overlayRect = ScreenCaptureRow.GetDetectionBoxPx();
-            var screenRect = ScreenCaptureRow.ToScreenRect(overlayRect);
+	    {
+		    var overlayRect = ScreenCaptureRow.GetDetectionBoxPx();
+		    var screenRect = ScreenCaptureRow.ToScreenRect(overlayRect);
 
-            using Bitmap bmp = ScreenCaptureRow.captureRegion(screenRect);
-            detectionText = ImageToText.ConvertImageToText(bmp);
+		    using Bitmap bmp = ScreenCaptureRow.captureRegion(screenRect);
+		    detectionText = ImageToText.ConvertImageToText(bmp);
 
-            return IsRewardScreenPresent(detectionText);
-        }
+		    bool result = IsRewardScreenPresent(detectionText);
 
-        public static int DetectRewardCount(List<string> texts)
-        {
-            int count = 0;
+		    return result;
+	    }
 
-            foreach (var text in texts)
+	    public static int DetectRewardCount(List<string> texts)
             {
-                if (ImageToText.ScoreText(text) >= 10) // tweak threshold
-                    count++;
-            }
+                int count = 0;
 
-            return count;
-        }
+                foreach (var text in texts)
+                {
+                    if (ImageToText.ScoreText(text) >= 10) // tweak threshold
+                        count++;
+                }
+
+                return count;
+            }
 
         public static int CountRewards()
         {

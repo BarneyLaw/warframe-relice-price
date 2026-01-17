@@ -5,12 +5,15 @@ using System.Windows.Shapes;
 
 using warframe_relice_price.OCRVision;
 using warframe_relice_price.WarframeTracker;
+using Rewards.Services;
+using System.Threading.Tasks;
 
 namespace warframe_relice_price.OverlayUI
 {
 	class OverlayRenderer
 	{
 		private readonly Canvas _overlayCanvas;
+		private readonly WarframeMarketClient _marketClient = new();
         private TextBlock _loadingTextBlock;
 
 		public OverlayRenderer(Canvas overlayCanvas)
@@ -18,70 +21,56 @@ namespace warframe_relice_price.OverlayUI
 			_overlayCanvas = overlayCanvas;
 		}
 
-        // Replace this later with actual rendering logic
-        public void DrawRelicPrices(List<int?> prices)
-        {
-            _overlayCanvas.Children.Clear();
-            double width = _overlayCanvas.ActualWidth;
-            double height = _overlayCanvas.ActualHeight;
+		public void DrawRelicPrices(List<int?> prices)
+		{
+			_overlayCanvas.Children.Clear();
 
-            int slots = prices.Count;
+			double width = _overlayCanvas.ActualWidth;
+			double height = _overlayCanvas.ActualHeight;
 
-            if (width <= 0 || height <= 0) return;
+			if (width <= 0 || height <= 0) return;
 
-            double rowY = height * OverlayConstants.RewardRowYPercent;
-            double priceOffsetY = rowY - (height * OverlayConstants.PriceOffsetYPercent);
+			int slots = prices.Count;
 
-            double totalRowWidth = width * OverlayConstants.TotalRowWidthPercent; 
-            double startX = (width - totalRowWidth) / 2;
-            double slotWidth = totalRowWidth / slots;
+			double rowY = height * OverlayConstants.RewardRowYPercent;
+			double priceOffsetY = rowY - (height * OverlayConstants.PriceOffsetYPercent);
 
-			// string ocrText = ImageToText.multiPassOCR(bmp);
-			// var items = RewardCounter.Count(ocrText);
+			double totalRowWidth = width * OverlayConstants.TotalRowWidthPercent;
+			double startX = (width - totalRowWidth) / 2;
+			double slotWidth = totalRowWidth / slots;
 
 			for (int i = 0; i < slots; i++)
 			{
 				double slotX = startX + i * slotWidth;
+				string displayText = prices[i] is null ? "No listings" : $"{prices[i]}p";
 
-                string displayText = "—";
-
-                int? price = prices[i];
-				displayText = price is null ? "No listings" : $"{price}p";
-
-                var priceText = new TextBlock
+				var priceText = new TextBlock
 				{
 					Text = displayText,
 					FontWeight = FontWeights.Bold,
-					Foreground = System.Windows.Media.Brushes.Gold,
+					Foreground = Brushes.Gold,
 					FontSize = height * 0.018,
 					TextAlignment = TextAlignment.Center
 				};
 
 				priceText.Measure(new System.Windows.Size(double.PositiveInfinity, double.PositiveInfinity));
-
 				Canvas.SetLeft(priceText, slotX + (slotWidth - priceText.DesiredSize.Width) / 2);
 				Canvas.SetTop(priceText, priceOffsetY);
 
 				_overlayCanvas.Children.Add(priceText);
 
-				// --- Remove after 15 seconds ---
+				// Remove after 1.5 seconds
 				_ = RemoveAfterDelayAsync(priceText, 1500);
 			}
 		}
 
-		// Helper to remove a TextBlock after a delay
 		private async Task RemoveAfterDelayAsync(UIElement element, int milliseconds)
 		{
 			await Task.Delay(milliseconds);
-
-			// Remove safely on UI thread
-			_overlayCanvas.Dispatcher.Invoke(() =>
-			{
-				_overlayCanvas.Children.Remove(element);
-			});
+			_overlayCanvas.Dispatcher.Invoke(() => _overlayCanvas.Children.Remove(element));
 		}
 
-        private Rect PxToDip(System.Drawing.Rectangle px)
+		private Rect PxToDip(System.Drawing.Rectangle px)
         {
             return new Rect(
                 px.X / WarframeWindowInfo.DpiX,

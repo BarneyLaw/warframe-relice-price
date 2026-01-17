@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Diagnostics;
+using System.IO;
+using warframe_relice_price.Utils;
 
 using warframe_relice_price.WarframeTracker;
 
@@ -101,19 +104,20 @@ namespace warframe_relice_price.OCRVision
             return grayScale;
         }
 
-        public static Bitmap Threshold(Bitmap src, byte threshold = 160)
-        {
-            Bitmap dst = new Bitmap(src.Width, src.Height);
-            for (int y = 0; y < src.Height; y++)
-            {
-                for (int x = 0; x < src.Width; x++)
-                {
-                    Color c = src.GetPixel(x, y);
-                    byte v = (byte)((c.R + c.G + c.B) / 3);
-                    dst.SetPixel(x, y, v > threshold ? Color.White : Color.Black);
-                }
-            }
-            return dst;
-        }
-    }
+		public static Bitmap Threshold(Bitmap src, byte threshold = 160)
+		{
+			Bitmap dst = new Bitmap(src.Width, src.Height);
+
+			for (int y = 0; y < src.Height; y++)
+			{
+				for (int x = 0; x < src.Width; x++)
+				{
+					Color c = src.GetPixel(x, y);
+					byte v = (byte)((c.R + c.G + c.B) / 3);
+					dst.SetPixel(x, y, v > threshold ? Color.White : Color.Black);
+				}
+			}
+			return dst;
+		}
+	}
 }

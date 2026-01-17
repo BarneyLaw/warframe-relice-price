@@ -244,42 +244,26 @@ namespace warframe_relice_price.Core
             _rewardScreenMisses = 0;
         }
 
-        private void DoEvents()
-        {
-            var frame = new DispatcherFrame();
-            Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Background, new DispatcherOperationCallback(delegate (object f)
-            {
-                ((DispatcherFrame)f).Continue = false;
-                return null;
-            }), frame);
-            Dispatcher.PushFrame(frame);
-        }
+		private async Task captureStableReward()
+		{
+			int numRewards = CheckForRewardScreen.CountRewards();
+			Logger.Log($"Capturing stable reward with {numRewards} rewards.");
 
-        private void captureStableReward()
-        {
-            // var screenRowRect = ScreenCaptureRow.ToScreenRect(ScreenCaptureRow.GetRewardRowPx());
-            // using var bmp = ScreenCaptureRow.captureRegion(screenRowRect);
-            // string rowText = ImageToText.multiPassOCR(bmp);
+			// Start all tasks in parallel
+			var tasks = new List<Task<int?>>();
+			for (int i = 0; i < numRewards; i++)
+			{
+				tasks.Add(RewardPrice.getPriceForItemAsync(i, numRewards));
+			}
 
-            // Maybe we can use another method to count rewards here?
-            // int numRewards = RewardCounter.Count(rowText).Count;
-            DoEvents();
+			int?[] prices = await Task.WhenAll(tasks);
 
-            int numRewards = CheckForRewardScreen.CountRewards();
-            Logger.Log($"Capturing stable reward with {numRewards} rewards.");
-            
-            List<int?> prices = new List<int?>();
+			// Update your overlay list
+			_prices.Clear();
+			_prices.AddRange(prices);
 
-            for (int i = 0; i < numRewards; i++)
-            {
-                int? price = RewardPrice.getPriceForItem(i, numRewards);
-                _prices.Add(price);
-            }
-            Logger.Log($"Captured {_prices.Count} prices.");
-
-            _overlayRenderer.ShowLoadingIndicator();
-            _overlayRenderer.HideLoadingIndicator();
-
-        }
-    }
+			// Draw overlay
+			_overlayRenderer.DrawRelicPrices(_prices);
+		}
+	}
 }
