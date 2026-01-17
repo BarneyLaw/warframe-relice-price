@@ -1,12 +1,12 @@
-﻿using System.Windows;
+﻿using Rewards.Services;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
-
 using warframe_relice_price.OCRVision;
 using warframe_relice_price.WarframeTracker;
-using Rewards.Services;
-using System.Threading.Tasks;
 
 namespace warframe_relice_price.OverlayUI
 {
@@ -248,20 +248,18 @@ namespace warframe_relice_price.OverlayUI
 
         public void ShowLoadingIndicator()
         {
-            if (_loadingTextBlock != null) return; // Already shown
-
+            double height = _overlayCanvas.ActualHeight;
             _loadingTextBlock = new TextBlock
             {
                 Text = "Loading...",
                 FontWeight = FontWeights.Bold,
                 Foreground = Brushes.White,
-                FontSize = 24,
-                Background = new SolidColorBrush(Color.FromArgb(128, 0, 0, 0)),
+                FontSize = 20,
                 TextAlignment = TextAlignment.Center
             };
             _loadingTextBlock.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
             double x = (_overlayCanvas.ActualWidth - _loadingTextBlock.DesiredSize.Width) / 2;
-            double y = (_overlayCanvas.ActualHeight - _loadingTextBlock.DesiredSize.Height) / 2;
+            double y = height * OverlayConstants.RewardRowYPercent - (height * OverlayConstants.PriceOffsetYPercent);
             Canvas.SetLeft(_loadingTextBlock, x);
             Canvas.SetTop(_loadingTextBlock, y);
 

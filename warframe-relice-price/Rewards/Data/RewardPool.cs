@@ -507,7 +507,7 @@ public static class RelicRewardPool
 		// Fang Prime
         new("Fang Prime Blueprint", "fang prime blueprint"),
 		new("Fang Prime Handle", "fang prime handle"),
-		new("Fang Prime Barrel", "fang prime barrel"),
+		new("Fang Prime Blade", "fang prime blade"),
 		
 		// Fragor Prime
         new("Fragor Prime Blueprint", "fragor prime blueprint"),

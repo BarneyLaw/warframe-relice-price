@@ -199,6 +199,7 @@ namespace warframe_relice_price.Core
                     {
                         if (rewardAge >= _rewardOcrDelay)
                         {
+                            _overlayRenderer.ShowLoadingIndicator();
                             captureStableReward();
                             _hasCapturedStableReward = true;
                         }
@@ -246,7 +247,7 @@ namespace warframe_relice_price.Core
 
 		private async Task captureStableReward()
 		{
-			int numRewards = CheckForRewardScreen.CountRewards();
+            int numRewards = CheckForRewardScreen.CountRewards();
 			Logger.Log($"Capturing stable reward with {numRewards} rewards.");
 
 			// Start all tasks in parallel
@@ -262,8 +263,9 @@ namespace warframe_relice_price.Core
 			_prices.Clear();
 			_prices.AddRange(prices);
 
-			// Draw overlay
-			_overlayRenderer.DrawRelicPrices(_prices);
+            // Draw overlay
+            _overlayRenderer.HideLoadingIndicator();
+            _overlayRenderer.DrawRelicPrices(_prices);
 		}
 	}
 }

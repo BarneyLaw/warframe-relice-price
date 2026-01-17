@@ -17,7 +17,8 @@ namespace warframe_relice_price.OCRVision
 
 			TesseractObject.tessEngine.SetVariable(
 				"tessedit_char_whitelist",
-				"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 ");
+				"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 "
+                );
 
 			using var page = TesseractObject.tessEngine.Process(pix);
 			string text = page.GetText().Trim();
@@ -55,15 +56,7 @@ namespace warframe_relice_price.OCRVision
 
             results.Add((grayThresh, ScoreText(grayThresh)));
 
-            string grayThresh2 = ConvertImageToText(
-                ScreenCaptureRow.Threshold(
-                    ScreenCaptureRow.toGrayScale(original), 160));
-
-            results.Add((grayThresh2, ScoreText(grayThresh)));
-
             var bestResult = results.OrderByDescending(r => r.Item2).First();
-
-			var bestResult = results.OrderByDescending(r => r.Score).First();
 
 			return bestResult.Text;
 		}
