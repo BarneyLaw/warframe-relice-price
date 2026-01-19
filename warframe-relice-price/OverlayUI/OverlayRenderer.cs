@@ -1,9 +1,7 @@
 ﻿using Rewards.Services;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 using warframe_relice_price.OCRVision;
 using warframe_relice_price.WarframeTracker;
@@ -12,21 +10,118 @@ namespace warframe_relice_price.OverlayUI
 {
 	class OverlayRenderer
 	{
-		private readonly Canvas _overlayCanvas;
-		private readonly WarframeMarketClient _marketClient = new();
+        private readonly Canvas _hudCanvas;
+        private readonly Canvas _menuCanvas; 
+        private readonly WarframeMarketClient _marketClient = new();
         private TextBlock _loadingTextBlock;
 
-		public OverlayRenderer(Canvas overlayCanvas)
-		{
-			_overlayCanvas = overlayCanvas;
-		}
+        private Rectangle? _dimLayer;
+        private Border? _menuPanel;
 
-		public void DrawRelicPrices(List<int?> prices)
-		{
-			_overlayCanvas.Children.Clear();
+        public bool IsOverlayMenuOpen { get; private set; }
 
-			double width = _overlayCanvas.ActualWidth;
-			double height = _overlayCanvas.ActualHeight;
+        public OverlayRenderer(Canvas hudCanvas, Canvas menuCanvas)
+		{
+            _hudCanvas = hudCanvas;
+            _menuCanvas = menuCanvas;
+        }
+
+        public void OpenOverlayMenu()
+        {
+            IsOverlayMenuOpen = true;
+            EnsureMenuVisuals();
+            SetMenuVisibility(visible: true);
+        }
+
+        public void CloseOverlayMenuIfOpen()
+        {
+            if (!IsOverlayMenuOpen)
+                return;
+
+            IsOverlayMenuOpen = false;
+            SetMenuVisibility(visible: false);
+        }
+
+        public void UpdateOverlayMenuLayout()
+        {
+            if (_dimLayer == null || _menuPanel == null)
+                return;
+
+            double w = _menuCanvas.ActualWidth;
+            double h = _menuCanvas.ActualHeight;
+            if (w <= 0 || h <= 0)
+                return;
+
+            _dimLayer.Width = w;
+            _dimLayer.Height = h;
+
+            _menuPanel.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            double mw = _menuPanel.DesiredSize.Width;
+            double mh = _menuPanel.DesiredSize.Height;
+
+            Canvas.SetLeft(_menuPanel, (w - mw) / 2);
+            Canvas.SetTop(_menuPanel, (h - mh) / 2);
+        }
+
+        private void EnsureMenuVisuals()
+        {
+            if (_dimLayer == null)
+            {
+                _dimLayer = new Rectangle
+                {
+                    Fill = new SolidColorBrush(Color.FromArgb(140, 0, 0, 0)),
+                    Visibility = Visibility.Collapsed,
+                    IsHitTestVisible = true
+                };
+                _menuCanvas.Children.Add(_dimLayer);
+            }
+
+            if (_menuPanel == null)
+            {
+                var stack = new StackPanel();
+                stack.Children.Add(new TextBlock
+                {
+                    Text = "Relic Overlay",
+                    FontSize = 20,
+                    FontWeight = FontWeights.Bold,
+                    Foreground = Brushes.White,
+                    Margin = new Thickness(0, 0, 0, 8)
+                });
+                stack.Children.Add(new TextBlock
+                {
+                    Text = "X / Esc: close menu\nQ: quit app\nShift+F9: toggle",
+                    FontSize = 14,
+                    Foreground = Brushes.Gainsboro
+                });
+
+                _menuPanel = new Border
+                {
+                    Background = new SolidColorBrush(Color.FromArgb(230, 20, 20, 20)),
+                    BorderBrush = Brushes.White,
+                    BorderThickness = new Thickness(1),
+                    CornerRadius = new CornerRadius(8),
+                    Padding = new Thickness(16),
+                    Child = stack,
+                    Visibility = Visibility.Collapsed,
+                    IsHitTestVisible = true
+                };
+
+                _menuCanvas.Children.Add(_menuPanel);
+            }
+        }
+
+        private void SetMenuVisibility(bool visible)
+        {
+            if (_dimLayer != null) _dimLayer.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+            if (_menuPanel != null) _menuPanel.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public void DrawRelicPrices(List<int?> prices)
+		{
+			_hudCanvas.Children.Clear();
+
+			double width = _hudCanvas.ActualWidth;
+			double height = _hudCanvas.ActualHeight;
 
 			if (width <= 0 || height <= 0) return;
 
@@ -57,7 +152,7 @@ namespace warframe_relice_price.OverlayUI
 				Canvas.SetLeft(priceText, slotX + (slotWidth - priceText.DesiredSize.Width) / 2);
 				Canvas.SetTop(priceText, priceOffsetY);
 
-				_overlayCanvas.Children.Add(priceText);
+                _hudCanvas.Children.Add(priceText);
 
 				// Remove after 1.5 seconds
 				_ = RemoveAfterDelayAsync(priceText, 1500);
@@ -67,7 +162,7 @@ namespace warframe_relice_price.OverlayUI
 		private async Task RemoveAfterDelayAsync(UIElement element, int milliseconds)
 		{
 			await Task.Delay(milliseconds);
-			_overlayCanvas.Dispatcher.Invoke(() => _overlayCanvas.Children.Remove(element));
+            _hudCanvas.Dispatcher.Invoke(() => _hudCanvas.Children.Remove(element));
 		}
 
 		private Rect PxToDip(System.Drawing.Rectangle px)
@@ -99,7 +194,7 @@ namespace warframe_relice_price.OverlayUI
             Canvas.SetLeft(rect, dipRect.X);
             Canvas.SetTop(rect, dipRect.Y);
 
-            _overlayCanvas.Children.Add(rect);
+            _hudCanvas.Children.Add(rect);
         }
 
         
@@ -129,7 +224,7 @@ namespace warframe_relice_price.OverlayUI
             Canvas.SetLeft(r, dip.X);
             Canvas.SetTop(r, dip.Y);
 
-            _overlayCanvas.Children.Add(r);
+            _hudCanvas.Children.Add(r);
         }
 
         public void DrawItemsName(string text)
@@ -173,7 +268,7 @@ namespace warframe_relice_price.OverlayUI
 
             Canvas.SetLeft(r, dip.X);
             Canvas.SetTop(r, dip.Y);
-            _overlayCanvas.Children.Add(r);
+            _hudCanvas.Children.Add(r);
 
             // Crosshair at (dip.X, dip.Y)
             var crossV = new System.Windows.Shapes.Line
@@ -195,8 +290,8 @@ namespace warframe_relice_price.OverlayUI
                 StrokeThickness = 2
             };
 
-            _overlayCanvas.Children.Add(crossV);
-            _overlayCanvas.Children.Add(crossH);
+            _hudCanvas.Children.Add(crossV);
+            _hudCanvas.Children.Add(crossH);
 
             var info = new TextBlock
             {
@@ -211,12 +306,12 @@ namespace warframe_relice_price.OverlayUI
 
             Canvas.SetLeft(info, 20);
             Canvas.SetTop(info, 20);
-            _overlayCanvas.Children.Add(info);
+            _hudCanvas.Children.Add(info);
         }
 
         public void DrawGuiActiveText()
         {
-            double x = _overlayCanvas.ActualWidth / 2;
+            double x = _hudCanvas.ActualWidth / 2;
 
             var text = new TextBlock
             {
@@ -242,13 +337,13 @@ namespace warframe_relice_price.OverlayUI
             Canvas.SetLeft(circle, x + text.DesiredSize.Width / 2 + 8);
             Canvas.SetTop(circle, 23);
 
-            _overlayCanvas.Children.Add(text);
-            _overlayCanvas.Children.Add(circle);
+            _hudCanvas.Children.Add(text);
+            _hudCanvas.Children.Add(circle);
         }
 
         public void ShowLoadingIndicator()
         {
-            double height = _overlayCanvas.ActualHeight;
+            double height = _hudCanvas.ActualHeight;
             _loadingTextBlock = new TextBlock
             {
                 Text = "Loading...",
@@ -258,26 +353,26 @@ namespace warframe_relice_price.OverlayUI
                 TextAlignment = TextAlignment.Center
             };
             _loadingTextBlock.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            double x = (_overlayCanvas.ActualWidth - _loadingTextBlock.DesiredSize.Width) / 2;
+            double x = (_hudCanvas.ActualWidth - _loadingTextBlock.DesiredSize.Width) / 2;
             double y = height * OverlayConstants.RewardRowYPercent - (height * OverlayConstants.PriceOffsetYPercent);
             Canvas.SetLeft(_loadingTextBlock, x);
             Canvas.SetTop(_loadingTextBlock, y);
 
-            _overlayCanvas.Children.Add(_loadingTextBlock);
+            _hudCanvas.Children.Add(_loadingTextBlock);
         }
 
         public void HideLoadingIndicator()
         {
             if (_loadingTextBlock != null)
             {
-                _overlayCanvas.Children.Remove(_loadingTextBlock);
+                _hudCanvas.Children.Remove(_loadingTextBlock);
                 _loadingTextBlock = null;
             }
         }
 
         public void DrawAll()
         {
-            _overlayCanvas.Children.Clear();
+            _hudCanvas.Children.Clear();
             DrawGuiActiveText();
         }
     }

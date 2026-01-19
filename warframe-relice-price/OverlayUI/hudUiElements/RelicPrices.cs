@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace warframe_relice_price.Utils
+namespace OverlayUI.hudUiElements;
+internal class RelicPrices
 {
-    internal class Macros
-    {
+    public RelicPrices() 
+    { 
+
     }
 }
+

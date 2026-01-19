@@ -15,7 +15,13 @@
         Left="0"
         Title="MainWindow">
     <Canvas x:Name="OverlayCanvas">
+        <Canvas x:Name="HUDLayer"
+            Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Canvas}}"
+            Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Canvas}}"/>
 
+        <Canvas x:Name="MenuLayer"
+            Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Canvas}}"
+            Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Canvas}}"/>
     </Canvas>
 
 </Window>

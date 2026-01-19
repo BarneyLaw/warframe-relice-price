@@ -14,19 +14,18 @@ namespace warframe_relice_price
         public MainWindow()
         {
             InitializeComponent();
-            this.Loaded += MakeClickThrough;
         }
 
-        private void MakeClickThrough(object sender, RoutedEventArgs e)
-        {
-            nint hwnd = new WindowInteropHelper(this).Handle;
+        //private void MakeClickThrough(object sender, RoutedEventArgs e)
+        //{
+        //    nint hwnd = new WindowInteropHelper(this).Handle;
 
-            int exStyle = Win32.GetWindowLong(hwnd, Win32.GWL_EXSTYLE);
-            nint newStyle = (nint)(exStyle | Win32.WS_EX_LAYERED | Win32.WS_EX_TRANSPARENT);
+        //    int exStyle = Win32.GetWindowLong(hwnd, Win32.GWL_EXSTYLE);
+        //    nint newStyle = (nint)(exStyle | Win32.WS_EX_LAYERED | Win32.WS_EX_TRANSPARENT);
 
-            Win32.SetWindowLong(hwnd, Win32.GWL_EXSTYLE, newStyle);
+        //    Win32.SetWindowLong(hwnd, Win32.GWL_EXSTYLE, newStyle);
 
-            Loaded -= MakeClickThrough;
-        }
+        //    Loaded -= MakeClickThrough;
+        //}
     }
 }

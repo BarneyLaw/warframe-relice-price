@@ -19,4 +19,8 @@
     <PackageReference Include="Tesseract.Drawing" Version="5.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="OverlayUI\MenuUiElements\" />
+  </ItemGroup>
+
 </Project>
