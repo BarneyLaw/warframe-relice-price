@@ -17,7 +17,8 @@ namespace warframe_relice_price.OCRVision
 
 			TesseractObject.tessEngine.SetVariable(
 				"tessedit_char_whitelist",
-				"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 ");
+				"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 "
+                );
 
 			using var page = TesseractObject.tessEngine.Process(pix);
 			string text = page.GetText().Trim();
@@ -43,27 +44,19 @@ namespace warframe_relice_price.OCRVision
 		{
 			var results = new List<(string Text, int Score)>();
 
-			// 1️⃣ Raw OCR
-			string raw = ImageToText.ConvertImageToText(original);
-			results.Add((raw, ScoreText(raw)));
+            string raw = ConvertImageToText(original);
+            results.Add((raw, ScoreText(raw)));
 
-			// 2️⃣ Grayscale OCR
-			string gray = ImageToText.ConvertImageToText(ScreenCaptureRow.toGrayScale(original));
-			results.Add((gray, ScoreText(gray)));
+            string gray = ConvertImageToText(ScreenCaptureRow.toGrayScale(original));
+            results.Add((gray, ScoreText(gray)));
 
-			// 3️⃣ Threshold OCR
-			string grayThresh = ImageToText.ConvertImageToText(
-				ScreenCaptureRow.Threshold(ScreenCaptureRow.toGrayScale(original), 160)
-			);
-			results.Add((grayThresh, ScoreText(grayThresh)));
+            string grayThresh = ConvertImageToText(
+                ScreenCaptureRow.Threshold(
+                    ScreenCaptureRow.toGrayScale(original), 160));
 
-			// 4️⃣ Threshold OCR again (seems duplicated in your code; might be unnecessary)
-			string grayThresh2 = ImageToText.ConvertImageToText(
-				ScreenCaptureRow.Threshold(ScreenCaptureRow.toGrayScale(original), 160)
-			);
-			results.Add((grayThresh2, ScoreText(grayThresh2)));
+            results.Add((grayThresh, ScoreText(grayThresh)));
 
-			var bestResult = results.OrderByDescending(r => r.Score).First();
+            var bestResult = results.OrderByDescending(r => r.Item2).First();
 
 			return bestResult.Text;
 		}

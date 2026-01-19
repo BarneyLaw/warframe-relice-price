@@ -7,7 +7,7 @@ public static class WarframeMarketNaming
 
     private static readonly string[] ComponentKeywords = new[]
 {
-            "chassis", "systems", "neuroptics", "stock", "blade", "handle",
+            "stock", "blade", "handle",
             "receiver", "barrel", "link", "girp", "forma", "cerebrum", "carapace",
         };
 

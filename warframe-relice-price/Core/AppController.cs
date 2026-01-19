@@ -199,8 +199,12 @@ namespace warframe_relice_price.Core
                     {
                         if (rewardAge >= _rewardOcrDelay)
                         {
+                            _overlayRenderer.ShowLoadingIndicator();
+                            DoEvents(); // Allow UI to update
                             captureStableReward();
                             _hasCapturedStableReward = true;
+                            _overlayRenderer.HideLoadingIndicator();
+
                         }
                         return;
                     }
@@ -233,7 +237,6 @@ namespace warframe_relice_price.Core
                     }
                 }
                 _overlayRenderer.DrawAll();
-                //_overlayRenderer.DrawAll(_window.Width, _window.Height, 4);
             }
         }
 
@@ -245,9 +248,22 @@ namespace warframe_relice_price.Core
             _rewardScreenMisses = 0;
         }
 
-		private async Task captureStableReward()
+        private void DoEvents()
+        {
+            var frame = new DispatcherFrame();
+            Dispatcher.CurrentDispatcher.BeginInvoke(
+                DispatcherPriority.Background,
+                new DispatcherOperationCallback(delegate (object f)
+                {
+                    ((DispatcherFrame)f).Continue = false;
+                    return null;
+                }), frame);
+            Dispatcher.PushFrame(frame);
+        }
+
+        private async Task captureStableReward()
 		{
-			int numRewards = CheckForRewardScreen.CountRewards();
+            int numRewards = CheckForRewardScreen.CountRewards();
 			Logger.Log($"Capturing stable reward with {numRewards} rewards.");
 
 			// Start all tasks in parallel
@@ -263,8 +279,8 @@ namespace warframe_relice_price.Core
 			_prices.Clear();
 			_prices.AddRange(prices);
 
-			// Draw overlay
-			_overlayRenderer.DrawRelicPrices(_prices);
+            // Draw overlay
+            _overlayRenderer.DrawRelicPrices(_prices);
 		}
 	}
 }

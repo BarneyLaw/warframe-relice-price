@@ -1,10 +1,12 @@
-﻿using System.Windows;
+﻿using Rewards.Services;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
+using System.Windows.Shapes;
 using warframe_relice_price.OCRVision;
 using warframe_relice_price.WarframeTracker;
-using Rewards.Services;
-using System.Threading.Tasks;
 
 namespace warframe_relice_price.OverlayUI
 {
@@ -12,6 +14,7 @@ namespace warframe_relice_price.OverlayUI
 	{
 		private readonly Canvas _overlayCanvas;
 		private readonly WarframeMarketClient _marketClient = new();
+        private TextBlock _loadingTextBlock;
 
 		public OverlayRenderer(Canvas overlayCanvas)
 		{
@@ -211,10 +214,71 @@ namespace warframe_relice_price.OverlayUI
             _overlayCanvas.Children.Add(info);
         }
 
+        public void DrawGuiActiveText()
+        {
+            double x = _overlayCanvas.ActualWidth / 2;
+
+            var text = new TextBlock
+            {
+                Text = "RELIC OVERLAY ACTIVE",
+                FontWeight = FontWeights.Bold,
+                Foreground = System.Windows.Media.Brushes.White,
+                FontSize = 14,
+                TextAlignment = TextAlignment.Center
+            };
+
+            text.Measure(new System.Windows.Size(double.PositiveInfinity, double.PositiveInfinity));
+
+            Canvas.SetLeft(text, x - text.DesiredSize.Width / 2);
+            Canvas.SetTop(text, 20);
+
+            var circle = new Ellipse
+            {
+                Width = 14,
+                Height = 14,
+                Fill = System.Windows.Media.Brushes.Green
+            };
+
+            Canvas.SetLeft(circle, x + text.DesiredSize.Width / 2 + 8);
+            Canvas.SetTop(circle, 23);
+
+            _overlayCanvas.Children.Add(text);
+            _overlayCanvas.Children.Add(circle);
+        }
+
+        public void ShowLoadingIndicator()
+        {
+            double height = _overlayCanvas.ActualHeight;
+            _loadingTextBlock = new TextBlock
+            {
+                Text = "Loading...",
+                FontWeight = FontWeights.Bold,
+                Foreground = Brushes.White,
+                FontSize = 20,
+                TextAlignment = TextAlignment.Center
+            };
+            _loadingTextBlock.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            double x = (_overlayCanvas.ActualWidth - _loadingTextBlock.DesiredSize.Width) / 2;
+            double y = height * OverlayConstants.RewardRowYPercent - (height * OverlayConstants.PriceOffsetYPercent);
+            Canvas.SetLeft(_loadingTextBlock, x);
+            Canvas.SetTop(_loadingTextBlock, y);
+
+            _overlayCanvas.Children.Add(_loadingTextBlock);
+        }
+
+        public void HideLoadingIndicator()
+        {
+            if (_loadingTextBlock != null)
+            {
+                _overlayCanvas.Children.Remove(_loadingTextBlock);
+                _loadingTextBlock = null;
+            }
+        }
+
         public void DrawAll()
         {
             _overlayCanvas.Children.Clear();
-            DrawDpiSanityTest();
+            DrawGuiActiveText();
         }
     }
 }
