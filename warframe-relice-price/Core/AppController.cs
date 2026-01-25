@@ -16,6 +16,7 @@ namespace warframe_relice_price.Core
         private readonly MainWindow _window;
         private readonly OverlayRenderer _overlayRenderer;
         private readonly WarframeWindowTracker _tracker;
+        private readonly OverlayShellController _overlayShell;
 
         private IntPtr _warframeHwnd;
         private AppState _state = AppState.Idle;
@@ -40,11 +41,15 @@ namespace warframe_relice_price.Core
 
         private List<int?> _prices = new List<int?>();
 
+        private bool _isWarframeForeground;
+        private bool _sleepLocked;
+
         public AppController(MainWindow window) 
         { 
             _window = window;
-            _overlayRenderer = new OverlayRenderer(window.OverlayCanvas);
+            _overlayRenderer = new OverlayRenderer(window.HUDLayer, window.MenuLayer);
             _tracker = new WarframeWindowTracker();
+            _overlayShell = new OverlayShellController(window, _overlayRenderer);
 
             WarframeProcess.WarframeStarted += OnWarframeStarted;
             WarframeProcess.WarframeStopped += OnWarframeStopped;
@@ -53,12 +58,12 @@ namespace warframe_relice_price.Core
 
             if (WarframeProcess.checkIfRunning())
             {
-                _window.Show();
+                _overlayShell.SetOverlayActive(true);
                 _state = AppState.InWarframe;
             }
             else
             {
-                _window.Hide();
+                _overlayShell.SetOverlayActive(false);
                 _state = AppState.Idle;
             }
         }
@@ -95,17 +100,20 @@ namespace warframe_relice_price.Core
         private void OnWarframeStarted(int pid)
         {
             _warframeHwnd = IntPtr.Zero;
-            _window.Show();
             _hasCapturedStableReward = false;
+
+            _overlayShell.SetOverlayActive(true);
         }
 
         private void OnWarframeStopped(int pid)
         {
             _warframeHwnd = IntPtr.Zero;
-            _window.Hide();
-            _window.OverlayCanvas.Children.Clear();
             _state = AppState.Idle;
             _hasCapturedStableReward = false;
+
+            _overlayShell.SetOverlayActive(false);
+            _isWarframeForeground = false;
+            _window.OverlayCanvas.Children.Clear();
         }
 
         private void OnTick(object sender, EventArgs e)
@@ -129,15 +137,42 @@ namespace warframe_relice_price.Core
             }
 
             // Check if Warframe is the foreground window
-            //if (Win32.GetForegroundWindow() != _warframeHwnd)
-            //{
-            //    _window.Hide();
-            //    return;
-            //}
-            //else
-            //{
-            //    _window.Show();
-            //}
+            bool isForeground = Win32.GetForegroundWindow() == _warframeHwnd;
+
+            if (_overlayShell.IsMenuOpen)
+            {
+                _sleepLocked = true;
+                _window.Show();
+                return;
+            }
+
+            // Menu just closed → wait for Warframe focus before sleeping again
+            if (_sleepLocked && isForeground)
+            {
+                _sleepLocked = false;
+                Logger.Log("Sleep lock released");
+            }
+
+            // If sleeping is allowed and Warframe not focused → sleep
+            if (!_sleepLocked && !isForeground)
+            {
+                if (_isWarframeForeground)
+                {
+                    Logger.Log("Warframe lost focus — sleeping overlay");
+                    _isWarframeForeground = false;
+                    _window.Hide();
+                }
+                return;
+            }
+
+            // Otherwise wake
+            if (!_isWarframeForeground)
+            {
+                Logger.Log("Overlay waking");
+                _isWarframeForeground = true;
+                _window.Show();
+            }
+
 
             if (_tracker.TryGetBounds(_warframeHwnd, out var rect))
             {
@@ -148,6 +183,13 @@ namespace warframe_relice_price.Core
                 WarframeWindowInfo.UpdateFromRect(rect, dpiX, dpiY);
 
                 SetOverlayWindowPositionAndSize(rect);
+
+                _overlayShell.TickLayout();
+
+                if (_overlayShell.IsMenuOpen)
+                {
+                    return;
+                }
 
                 if (_state == AppState.Idle)
                 {
@@ -199,11 +241,11 @@ namespace warframe_relice_price.Core
                     {
                         if (rewardAge >= _rewardOcrDelay)
                         {
-                            _overlayRenderer.ShowLoadingIndicator();
+                            _overlayRenderer.Hud.ShowLoadingIndicator();
                             DoEvents(); // Allow UI to update
                             captureStableReward();
                             _hasCapturedStableReward = true;
-                            _overlayRenderer.HideLoadingIndicator();
+                            _overlayRenderer.Hud.HideLoadingIndicator();
 
                         }
                         return;
@@ -217,7 +259,7 @@ namespace warframe_relice_price.Core
 
                     if (CheckForRewardScreen.TryDetectRewardScreen(out _))
                     {
-                        _overlayRenderer.DrawRelicPrices(_prices);
+                        _overlayRenderer.Hud.DrawRelicPrices(_prices);
                         _rewardScreenMisses = 0;
                         return;
                     }
@@ -236,7 +278,7 @@ namespace warframe_relice_price.Core
                         ResetToInWarframe();
                     }
                 }
-                _overlayRenderer.DrawAll();
+                _overlayRenderer.Hud.DrawAll();
             }
         }
 
@@ -280,7 +322,7 @@ namespace warframe_relice_price.Core
 			_prices.AddRange(prices);
 
             // Draw overlay
-            _overlayRenderer.DrawRelicPrices(_prices);
+            _overlayRenderer.Hud.DrawRelicPrices(_prices);
 		}
 	}
 }

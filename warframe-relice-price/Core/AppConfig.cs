@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+/// <summary>
+/// This class is intended to hold application configuration settings. To be updated in the future.
 
 namespace warframe_relice_price.Core
 {
